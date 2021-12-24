@@ -1,0 +1,4 @@
+DB=/data/database.sqlite3
+DOWNLOADS_PATH=/data/downloads
+WEB_PATH=/data/web
+PORT=8889

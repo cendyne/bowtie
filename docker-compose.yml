@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  bowtie-app:
+    build: .
+    ports:
+      - "8889:8889"
+    volumes:
+      - bowtie-data:/data
+    env_file:
+      - .dockerenv
+      - .basedockerenv
+volumes:
+  bowtie-data: {}

@@ -1,0 +1,6 @@
+.env
+.dockerenv
+data
+supervisord.log
+supervisord.pid
+__pycache__

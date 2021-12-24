@@ -1,0 +1,11 @@
+# Copy to .env and fill in the values
+DB=./data/database.sqlite3
+DOWNLOADS_PATH=./data/downloads
+WEB_PATH=./data/web
+BOT_TOKEN=
+ADMIN=
+PORT=8889
+SFTP_HOST=
+SFTP_USER=
+SFTP_PASS=
+SFTP_PATH=

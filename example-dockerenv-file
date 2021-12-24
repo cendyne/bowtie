@@ -1,0 +1,7 @@
+# Copy to .dockerenv and fill in the values
+BOT_TOKEN=
+ADMIN=
+SFTP_HOST=
+SFTP_USER=
+SFTP_PASS=
+SFTP_PATH=
