@@ -54,8 +54,8 @@ def with_retry(func):
         for i in range(10):
             try:
                 return func(*args, **kwargs)
-            except sqlite3.OperationalError:
-                logging.warn("sqlite3 operational error")
+            except sqlite3.OperationalError as e:
+                logging.warn("sqlite3 operational error", e)
                 time.sleep(0.2)
         con = create_connection()
     return wrapper
@@ -183,6 +183,35 @@ def find_asset(source: String, variant: String) -> Optional[Asset]:
 @with_connection
 @with_cursor
 @with_retry
+def has_tweet(identity: int) -> bool:
+    results = localthreaddb.cur.execute("select id from bowtie_tweet where id = :id", {
+        "id": identity
+    }).fetchone()
+    if results and len(results) > 0:
+        return True
+    return False
+
+@with_cursor
+@with_retry
+def has_tweet(identity: int) -> bool:
+    results = localthreaddb.cur.execute("select id from bowtie_tweet where id = :id", {
+        "id": identity
+    }).fetchone()
+    if results and len(results) > 0:
+        return True
+    return False
+
+@with_cursor
+@with_retry
+def save_tweet(identity: int, json: Text) -> None:
+    localthreaddb.cur.execute("insert into bowtie_tweet(id, json) values (:id, :json)", {
+        "id": identity,
+        "json": json
+    })
+
+@with_connection
+@with_cursor
+@with_retry
 def read_config(name: Text) -> Union[Text, None]:
     results = localthreaddb.cur.execute("select value from bowtie_config where name = :name", {"name": name}).fetchone()
     if results and len(results) > 0:
@@ -207,3 +236,4 @@ def init() -> None:
     cur.execute("create index if not exists bowtie_entry_date on bowtie_entry(date)")
     cur.execute("create table if not exists bowtie_asset (id integer primary key autoincrement, source text, variant text, destination text)")
     cur.execute("create index if not exists bowtie_asset_source on bowtie_asset(source, variant)")
+    cur.execute("create table if not exists bowtie_tweet (id int primary key, json text)")

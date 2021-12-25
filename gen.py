@@ -41,6 +41,9 @@ TEMPLATE_BEGIN = """
 <title>Cendyne Bowtie Blog</title>
 </head>
 <body bgcolor="#3F2E26">
+<table align="center" border="0" cellpadding="20" width="460">
+<tr><td align="center"><a href="/"><font color="#f7b2a9">The Digital Bowtie Lodge</font></a></td></tr>
+</table>
 """
 NAV_BEGIN = """
 <table align="center" border="0" cellpadding="20" width="460">
@@ -237,7 +240,7 @@ def build(state:State) -> None:
             if photo.endswith(".webp"):
                 # Convert to jpg with background
                 variant=VARIANT_256
-            elif photo.endswith(".jpg"):
+            elif photo.endswith(".jpg") or photo.endswith(".png"):
                 # Resized
                 variant=VARIANT_256
             elif photo.endswith(".mp4") or photo.endswith(".gif"):
@@ -390,7 +393,10 @@ def main() -> None:
     state = State()
     while True:
         time.sleep(1)
-        build(state)
+        try:
+            build(state)
+        except Exception as e:
+            logging.error("An error!", e)
 
 if __name__ == '__main__':
     main()
