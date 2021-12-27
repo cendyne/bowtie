@@ -15,7 +15,6 @@ echo "- $DOCKER_REPO:latest"
 echo "- $DOCKER_REPO:${GITHUB_SHA:0:7}"
 # This script is only meant to run on main in github
 docker buildx build --platform "$PLATFORMS" . \
-    --target=app \
     --tag "$DOCKER_REPO:latest" \
     --tag "$DOCKER_REPO:${GITHUB_SHA:0:7}" \
     --label "org.opencontainers.image.revision=$GITHUB_SHA" \
