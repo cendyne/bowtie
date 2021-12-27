@@ -1,6 +1,7 @@
 set -e
 # Too many platforms and it'll run out of memory..
-PLATFORMS="linux/amd64,linux/arm64"
+# Removing linux/arm64 because compiling PyNacl takes too long
+PLATFORMS="linux/amd64"
 DATE=$(date '+%Y-%m-%dT%H:%M:%S')
 
 if [ -z "$GITHUB_SHA" ]; then
