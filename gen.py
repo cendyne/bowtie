@@ -394,7 +394,12 @@ def main() -> None:
     bowtiedb.init()
 
     # Copy all static content into the web serving path upon startup
-    dir_util.copy_tree("./static/", web_path)
+
+    try:
+        dir_util.copy_tree("./static/", web_path)
+    except Exception as e:
+        logging.error("An error!", e)
+    
 
     state = State()
     while True:
