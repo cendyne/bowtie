@@ -10,6 +10,7 @@ import datetime
 import html
 import subprocess
 import ffmpeg
+from distutils import dir_util
 from typing import Dict, List, Text, Tuple, Union, Optional
 from dataclasses import dataclass
 from dotenv import load_dotenv
@@ -42,7 +43,7 @@ TEMPLATE_BEGIN = """
 </head>
 <body bgcolor="#3F2E26">
 <table align="center" border="0" cellpadding="20" width="460">
-<tr><td align="center"><a href="/"><font color="#f7b2a9">The Digital Bowtie Lodge</font></a></td></tr>
+<!--<tr><td align="center"><a href="/"><font color="#f7b2a9">The Digital Bowtie Lodge</font></a></td></tr>-->
 </table>
 """
 NAV_BEGIN = """
@@ -363,23 +364,25 @@ def build(state:State) -> None:
             logging.info("Wrote %s", filename)
             files.append(filename)
 
-    if sftp_host and len(sftp_host) > 0 and sftp_pass and sftp_user and sftp_path:
-        cnopts = pysftp.CnOpts()
-        cnopts.hostkeys = None
-        with pysftp.Connection(sftp_host, username=sftp_user, password=sftp_pass, cnopts=cnopts) as sftp:
-            with sftp.cd(sftp_path):
-                for f in files:
-                    web_file = web_path + "/" + f
-                    if not sftp.exists(f):
-                        logging.info("Upload %s", f)
-                        sftp.put(web_file, f)
-                    else:
-                        remote_stat = sftp.lstat(f)
-                        local_stat = os.stat(web_file)
-                        if local_stat.st_size != remote_stat.st_size:
-                            # The files are different!
-                            logging.info("Upload %s", f)
-                            sftp.put(web_file, f)
+    # Remote upload to bowtie is currently disabled
+    # Unfortunately the host is down and may not return.
+    # if sftp_host and len(sftp_host) > 0 and sftp_pass and sftp_user and sftp_path:
+    #     cnopts = pysftp.CnOpts()
+    #     cnopts.hostkeys = None
+    #     with pysftp.Connection(sftp_host, username=sftp_user, password=sftp_pass, cnopts=cnopts) as sftp:
+    #         with sftp.cd(sftp_path):
+    #             for f in files:
+    #                 web_file = web_path + "/" + f
+    #                 if not sftp.exists(f):
+    #                     logging.info("Upload %s", f)
+    #                     sftp.put(web_file, f)
+    #                 else:
+    #                     remote_stat = sftp.lstat(f)
+    #                     local_stat = os.stat(web_file)
+    #                     if local_stat.st_size != remote_stat.st_size:
+    #                         # The files are different!
+    #                         logging.info("Upload %s", f)
+    #                         sftp.put(web_file, f)
 
 
 
@@ -389,6 +392,9 @@ def build(state:State) -> None:
 def main() -> None:
     logging.info("Init")
     bowtiedb.init()
+
+    # Copy all static content into the web serving path upon startup
+    dir_util.copy_tree("./static/", web_path)
 
     state = State()
     while True:
