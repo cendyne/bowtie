@@ -8,6 +8,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 RUN pip3 install -r requirements.txt
 
 
-ADD run.sh bot.py twitter.py gen.py bowtiedb.py supervisord.conf static /app/
+ADD run.sh bot.py twitter.py gen.py bowtiedb.py supervisord.conf /app/
+ADD static /app/static/
 
 CMD ["bash", "run.sh"]
