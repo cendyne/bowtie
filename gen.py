@@ -40,6 +40,7 @@ TEMPLATE_BEGIN = """
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="width=device-width">
 <title>Cendyne Bowtie Blog</title>
+<meta name="robots" content="noindex">
 </head>
 <body bgcolor="#3F2E26">
 <table align="center" border="0" cellpadding="20" width="460">
@@ -177,7 +178,7 @@ def makeHtml(content: Text, entities: List[bowtiedb.TelegramMessageEntity]) -> T
                 elif entity.type == "mention":
                     before = '<a href="https://t.me/' + content[position + 1:(position+entity.length)] + '"><font color="#f7b2a9">'
                 active.add(entity.type)
-            
+
             if entity.offset + entity.length - 1 == position:
                 if entity.type == "bold":
                     after = "</b>"
@@ -200,8 +201,8 @@ def makeHtml(content: Text, entities: List[bowtiedb.TelegramMessageEntity]) -> T
                 elif entity.type == "mention":
                     after = '</font></a>'
                 active.remove(entity.type)
-            if (entity.offset <= position 
-                and entity.offset + entity.length <= position 
+            if (entity.offset <= position
+                and entity.offset + entity.length <= position
                 and entity.type == "pre"):
                 nl2br = False
 
